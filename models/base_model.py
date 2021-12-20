@@ -6,9 +6,11 @@ import sqlalchemy
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
+
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
 Base = declarative_base()
+
 
 class BaseModel:
     """A base class for all hbnb models"""
