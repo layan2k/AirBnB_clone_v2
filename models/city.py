@@ -12,4 +12,4 @@ class City(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     # Establishes a relationship between Places and Cities
-    places = relationship("Place", cascade="all, delete", backref="cities")
+    places = relationship("Place", cascade="delete", backref="cities")

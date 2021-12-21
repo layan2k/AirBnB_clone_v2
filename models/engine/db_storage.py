@@ -12,16 +12,13 @@ class DBStorage():
     __session = None
 
     def __init__(self):
-        """ Init """
-        # Create engine using environmental variables
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(
-                                                getenv('HBNB_MYSQL_USER'),
-                                                getenv('HBNB_MYSQL_PWD'),
-                                                getenv('HBNB_MYSQL_HOST'),
-                                                getenv('HBNB_MYSQL_DB'),
-                                                pool_pre_pring=True
-                                      ))
+        """Initialize a new DBStorage instance."""
+        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".
+                                      format(getenv("HBNB_MYSQL_USER"),
+                                             getenv("HBNB_MYSQL_PWD"),
+                                             getenv("HBNB_MYSQL_HOST"),
+                                             getenv("HBNB_MYSQL_DB")),
+                                      pool_pre_ping=True)
 
         # Drop all tables if in test environment
         if getenv('HBNB_ENV') == 'test':
