@@ -117,40 +117,36 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        list_args = args.split()
+        show_split = args.split()
+        currentObj = show_split[0]
         if not args:
             print("** class name missing **")
             return
-        elif list_args[0] not in HBNBCommand.classes:
+        elif currentObj not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
-        dict_args = {}
-        keyw = []
-        value = []
-        #print("--->>>>", list_args)
-        for arg in list_args:
-            tmp_arg = arg.split('=')
-            if len(tmp_arg) == 2:
-                tmp_arg[1] = tmp_arg[1].replace('_', ' ')
-                tmp_arg[1] = tmp_arg[1].replace('"', '')
-                keyw.append(tmp_arg[0])
-                value.append(tmp_arg[1])
-                dict_args = dict(zip(keyw, value))
-
-                #dict_args[tmp_arg[0]] = tmp_arg[1]
-        #print("--->", dict_args)
-
-        new_instance = HBNBCommand.classes[list_args[0]]()
-
-        for key, value in dict_args.items():
-            setattr(new_instance, key, value)
-        #print(new_instance)
-        if getenv("HBNB_TYPE_STORAGE") != "db": ########
-            storage.new(new_instance)
-        storage.save()
+        new_instance = HBNBCommand.classes[currentObj]()
+        # Check arguments
+        for i in range(1, len(show_split)):
+            try:
+                # Set Key
+                pair = show_split[i].split('=')
+                key = pair[0]
+                # Test Pair type
+                key_type = type(getattr(new_instance, key))
+                # Set Pair value
+                if key_type == float:
+                    value = float(pair[1])
+                elif key_type == int:
+                    value = int(float(pair[1]))
+                else:
+                    value = pair[1].replace('_', ' ').replace('\"', '')
+                # Set attribute
+                setattr(new_instance, key, value)
+            except Exception:
+                pass
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
