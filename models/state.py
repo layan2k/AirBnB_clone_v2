@@ -15,7 +15,3 @@ class State(BaseModel, Base):
         cities = relationship("City", backref="state")
     else:
         name = ""
-
-    def __init__(self, *args, **kwargs):
-        """initializes state"""
-        super().__init__(*args, **kwargs)
