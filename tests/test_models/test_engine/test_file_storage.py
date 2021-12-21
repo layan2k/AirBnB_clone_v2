@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """ Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
@@ -106,6 +107,3 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
-
-if __name__ == "__main__":
-    unittest.main()

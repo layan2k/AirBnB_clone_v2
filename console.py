@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+import models
 import sys
+from os import getenv
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -73,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is '}'\
+                    if pline[0] is '{' and pline[-1] is'}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,55 +117,38 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        args = args.split()
-
-        if len(args) == 0:
+        list_args = args.split()
+        if not args:
             print("** class name missing **")
             return
-        elif args[0] not in HBNBCommand.classes:
+        elif list_args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args[0]]()
 
-        # If there are more arguments being passed (<name>="<value>")
-        if len(args) > 1:
-            # For every argument after the first (which was class name)
-            for string in args[1:]:
-                # Skip arg if it doesn't match name=value
-                if '=' not in string or string[0] == '=' or string[-1] == '=':
-                    continue
+        dict_args = {}
+        keyw = []
+        value = []
+        #print("--->>>>", list_args)
+        for arg in list_args:
+            tmp_arg = arg.split('=')
+            if len(tmp_arg) == 2:
+                tmp_arg[1] = tmp_arg[1].replace('_', ' ')
+                tmp_arg[1] = tmp_arg[1].replace('"', '')
+                keyw.append(tmp_arg[0])
+                value.append(tmp_arg[1])
+                dict_args = dict(zip(keyw, value))
 
-                # Attribute name is everything before '='
-                attr_name = string[:string.find('=')]
+                #dict_args[tmp_arg[0]] = tmp_arg[1]
+        #print("--->", dict_args)
 
-                # If attribute name does not belong to this class, skip
-                if attr_name not in HBNBCommand.class_attrs[args[0]]:
-                    continue
+        new_instance = HBNBCommand.classes[list_args[0]]()
 
-                # Attribute value is everything after '='
-                attr_value = string[string.find('=') + 1:]
-
-                # Remove double quotes if they exist and label type as string
-                # If there isn't a complete pair of quotes, skip
-                # If no quotes are found, label as float or int accordingly
-                if attr_value[0] == '"' and attr_value[-1] == '"':
-                    attr_value = attr_value[1:-1]
-                    attr_type = str
-                elif attr_value[0] == '"' or attr_value[-1] == '"':
-                    continue
-                else:
-                    if '.' in attr_value:
-                        attr_type = float
-                    else:
-                        attr_type = int
-
-                # Replace any underscores with spaces
-                attr_value = attr_value.replace("_", " ")
-
-                # Set attribute
-                setattr(new_instance, attr_name, attr_type(attr_value))
-
-        storage.new(new_instance)
+        for key, value in dict_args.items():
+            setattr(new_instance, key, value)
+        #print(new_instance)
+        if getenv("HBNB_TYPE_STORAGE") != "db": ########
+            storage.new(new_instance)
+        storage.save()
         print(new_instance.id)
         storage.save()
 
@@ -240,21 +225,19 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
+        if not args:
+            o = storage.all()
+            print([o[k].__str__() for k in o])
+            return
+        try:
+            args_2 = args.split(" ")
+            if args_2[0] not in HBNBCommand.classes:
+                raise NameError()
 
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            o = storage.all(eval(args_2[0]))
+            print([o[k].__str__() for k in o])
+        except NameError:
+            print("** class doesn't exist")
 
     def help_all(self):
         """ Help information for the all command """
@@ -360,7 +343,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
