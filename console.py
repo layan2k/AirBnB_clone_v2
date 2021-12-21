@@ -115,39 +115,57 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            lng = args.split(" ")
-            obj = eval(lng[0])()
-            for i in range(1, len(lng)):
-                key_values = lng[i].split("=")
-                key = key_values[0]
-                value = key_values[1]
-                # formating the value
-                if value[0][:1] == "\"" and value[0][-1:] == "\"":
-                    value = key_values[1][1:-1].replace('_', ' ')\
-                                               .replace('\"', '\\"')
-                elif value.isdigit():
-                    value = int(value)
-                else:
-                    try:
-                        value = float(value)
-                    except ValueError:
-                        continue
-                setattr(obj, key, value)
+        args = args.split()
 
-            obj.save()
-            print(obj.id)
-        except SyntaxError:
+        if len(args) == 0:
             print("** class name missing **")
-        except NameError:
+            return
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
+            return
+        new_instance = HBNBCommand.classes[args[0]]()
 
-        # new_instance = HBNBCommand.classes[args]()
-        # storage.save()
-        # print(new_instance.id)
-        # storage.save()
+        # If there are more arguments being passed (<name>="<value>")
+        if len(args) > 1:
+            # For every argument after the first (which was class name)
+            for string in args[1:]:
+                # Skip arg if it doesn't match name=value
+                if '=' not in string or string[0] == '=' or string[-1] == '=':
+                    continue
+
+                # Attribute name is everything before '='
+                attr_name = string[:string.find('=')]
+
+                # If attribute name does not belong to this class, skip
+                if attr_name not in HBNBCommand.class_attrs[args[0]]:
+                    continue
+
+                # Attribute value is everything after '='
+                attr_value = string[string.find('=') + 1:]
+
+                # Remove double quotes if they exist and label type as string
+                # If there isn't a complete pair of quotes, skip
+                # If no quotes are found, label as float or int accordingly
+                if attr_value[0] == '"' and attr_value[-1] == '"':
+                    attr_value = attr_value[1:-1]
+                    attr_type = str
+                elif attr_value[0] == '"' or attr_value[-1] == '"':
+                    continue
+                else:
+                    if '.' in attr_value:
+                        attr_type = float
+                    else:
+                        attr_type = int
+
+                # Replace any underscores with spaces
+                attr_value = attr_value.replace("_", " ")
+
+                # Set attribute
+                setattr(new_instance, attr_name, attr_type(attr_value))
+
+        storage.new(new_instance)
+        print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
