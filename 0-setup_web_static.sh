@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #script that configures NGINX Folders and files
-Placeholder ="
+Placeholder="
   <head>
   </head>
   <body>
