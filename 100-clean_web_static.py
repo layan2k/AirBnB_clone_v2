@@ -4,19 +4,17 @@
 
 from fabric.api import *
 
+
 env.user = 'ubuntu'
 env.hosts = ['3.238.253.91', '35.237.111.104']
 
 
 def do_clean(number=0):
-    """Clean"""
-    no = int(number)
-
-    if no == 0:
-        no == 2
-    else:
-        no += 1
-
-    local('cd versions ; ls -t | tail -n +{} | xargs rm -rf'.format(no))
-    path = '/data/web_static/releases'
-    run('cd {} ; ls -t | tail -n +{} | xargs rm -rf'.format(path, no))
+    if number == 0:
+        number = 1
+    with cd.local('./versions'):
+        local("ls -lt | tail -n +{} | rev | cut -f1 -d" " | rev | \
+            xargs -d '\n' rm".format(1 + number))
+    with cd('/data/web_static/releases/'):
+        run("ls -lt | tail -n +{} | rev | cut -f1 -d" " | rev | \
+            xargs -d '\n' rm".format(1 + number))
