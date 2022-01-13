@@ -7,7 +7,7 @@ Placeholder="
     Dummy Text
   </body>"
 
-SED ="\\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
+SED="\\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y install nginx
