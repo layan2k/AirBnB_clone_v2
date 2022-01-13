@@ -3,6 +3,12 @@
 exec {'update':
   provider => shell,
   command  => 'sudo apt-get -y update',
+  before   => Exec['upgrade'],
+}
+
+exec {'upgrade':
+  provider => shell,
+  command  => 'sudo apt-get -y upgrade',
   before   => Exec['install Nginx'],
 }
 
@@ -14,46 +20,38 @@ exec {'install Nginx':
 
 exec { 'Make Release Folder':
   provider    => shell,
-  command     => 'sudo mkdir -p /data/web_static/releases',
-  before      => Exec['Make Shared Folder'],
-}
-
-exec { 'Make Shared Folder':
-  provider    => shell,
-  command     => 'sudo mkdir -p /data/web_static/shared',
-  before      => Exec['Test Folder'],
-}
-
-exec { 'Test Folder':
-  provider    => shell,
-  command     => 'sudo mkdir -p /data/web_static/releases/test',
-  before      => Exec['touch_index'],
-}
-
-exec { 'touch_index':
-  provider    => shell,
-  command     => 'sudo touch /data/web_static/releases/test/index.html',
+  command     => 'sudo mkdir -p /data/web_static/releases /data/web_static/shared',
   before      => Exec['write_index'],
 }
 
 exec { 'write_index':
   provider    => shell,
-  command     => 'sudo echo "Dummy Text" > /data/web_static/releases/test/index.html',
+  environment => [Placeholder="
+  <head>
+  </head>
+  <body>
+    Dummy Text
+  </body>"]
+  command     => 'echo "$Placeholder" | sudo tee /data/web_static/releases/test/index.html',
   before      => Exec['symbolic_link'],
 }
+
 exec { 'symbolic_link':
   provider    => shell,
   command     => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
   before      => Exec['permissions'],
 }
+
 exec { 'permissions':
   provider    => shell,
-  command     => 'sudo chown -R ubuntu:ubuntu /data/',
+  command     => 'sudo chown -hR ubuntu:ubuntu /data/',
   before      => Exec['nginx_config'],
 }
+
 exec { 'nginx_config':
   provider    => shell,
-  command     => 'sudo sed -i '38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default',
+  environment => [SED="\\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"]
+  command     => 'sudo sed -i "35i $SED" /etc/nginx/sites-available/default',
   before      => Exec['restart Nginx'],
 }
 
