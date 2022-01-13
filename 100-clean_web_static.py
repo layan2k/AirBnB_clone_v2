@@ -5,17 +5,18 @@
 from fabric.api import *
 
 env.user = 'ubuntu'
-env.hosts = ['3.238.253.91','35.237.111.104']
+env.hosts = ['3.238.253.91', '35.237.111.104']
+
 
 def do_clean(number=0):
-     """Clean"""
-     no = int(number)
+    """Clean"""
+    no = int(number)
 
-     if no == 0:
+    if no == 0:
         no == 2
-     else:
+    else:
         no += 1
 
-     local('cd versions ; ls -t | tail -n +{} | xargs rm -rf'.format(no))
-     path = '/data/web_static/releases'
-     run('cd {} ; ls -t | tail -n +{} | xargs rm -rf'.format(path, no))
+    local('cd versions ; ls -t | tail -n +{} | xargs rm -rf'.format(no))
+    path = '/data/web_static/releases'
+    run('cd {} ; ls -t | tail -n +{} | xargs rm -rf'.format(path, no))

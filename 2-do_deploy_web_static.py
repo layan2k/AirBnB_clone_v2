@@ -8,11 +8,12 @@ from os.path import exists
 
 
 env.user = 'ubuntu'
-env.hosts = ['3.238.253.91','35.237.111.104']
+env.hosts = ['3.238.253.91', '35.237.111.104']
+
 
 def do_deploy(archive_path):
     """Do Deply to webserver"""
-    if exists(archive_path)is False:
+    if exists(archive_path) is False:
         return False
     try:
         file_n = archive_path.split("/")[-1]

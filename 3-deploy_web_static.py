@@ -9,7 +9,7 @@ from datetime import datetime
 from os.path import exists, isdir
 
 env.user = 'ubuntu'
-env.hosts = ['3.238.253.91','35.237.111.104']
+env.hosts = ['3.238.253.91', '35.237.111.104']
 
 
 def do_pack():
@@ -23,6 +23,7 @@ def do_pack():
         return file_name
     except:
         return None
+
 
 def do_deploy(archive_path):
     """Do Deploy to webserver"""
@@ -43,6 +44,7 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
 
 def deploy():
     """Creates and distributes an archive to your web servers"""
