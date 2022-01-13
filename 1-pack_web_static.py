@@ -11,12 +11,11 @@ from os.path import isdir
 
 def do_pack():
     """Generates tgz"""
+    currentdate = datetime.now().strftime("%Y%m%d%H%M%S")
     try:
-        currentdate = datetime.now().strftime("%Y%m%d%H%M%S")
-        if isdir("versions") is False:
-            local("mkdir -p versions")
-            file_name = "versions/web_static_{}.tgz".format(currentdate)
-            local("tar -cvzf {} web_static".format(file_name))
+        local("mkdir -p versions")
+        file_name = "versions/web_static_{}.tgz".format(currentdate)
+        local("tar -cvzf {} web_static".format(file_name))
         return file_name
     except Exception:
         return None
