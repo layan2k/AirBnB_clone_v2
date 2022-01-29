@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def tearDown():
+def tearDown(self):
     """Closes each SQLAlchemyTask"""
     storage.close()
 
