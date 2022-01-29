@@ -34,7 +34,7 @@ def pythontext(text="is cool"):
     return "Python {}".format(text.replace('_', ' '))
 
 
-@app.route("/number/<int:n>")
+@app.route("/number/<int:n>", strict_slashes=False)
 def isint(n):
     """return n if interger"""
     return ("{:d} is a number".format(n))

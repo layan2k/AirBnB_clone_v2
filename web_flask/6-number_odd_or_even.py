@@ -34,19 +34,19 @@ def pythontext(text="is cool"):
     return "Python {}".format(text.replace('_', ' '))
 
 
-@app.route("/number/<int:n>")
+@app.route("/number/<int:n>", strict_slashes=False)
 def isint(n):
     """return n if interger"""
     return ("{:d} is a number".format(n))
 
 
-@app.route("/number_template/<int:n>")
+@app.route("/number_template/<int:n>", strict_slashes=False)
 def isnumber(n):
     """return n if interger, renders template"""
     return render_template("5-number.html", n=n)
 
 
-@app.route("/number_odd_or_even/<int:n>")
+@app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
 def isevenodd(n):
     """return n if interger, renders template"""
     return render_template("6-number_odd_or_even.html", number=n)
