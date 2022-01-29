@@ -23,24 +23,25 @@ def hbnb():
 
 @app.route("/c/<text>", strict_slashes=False)
 def ctext(text):
-    """Returns ,C <text>"""
-    return "C {}".format(text.replace("_", " "))
+    """Returns HBNB"""
+    return "C {}".format(text.replace('_', ' '))
 
 
-@app.route("/python/<text>", strict_slashes=False)
-def ctext(text="is_cool"):
-    """Returns Python <text> Default= is_cool"""
-    return "Python {}".format(text.replace("_", " "))
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def pythontext(text="is cool"):
+    """Returns Python <text> Default= is cool"""
+    return "Python {}".format(text.replace('_', ' '))
 
 
 @app.route("/number/<int:n>")
 def isint(n):
     """return n if interger"""
-    return ("{} is a number".format(n))
+    return ("{:d} is a number".format(n))
 
 
 @app.route("/number/<int:n>")
-def isint(n):
+def isint_2(n):
     """return n if interger, renders template"""
     return render_template("5-number.html", number=n)
 
