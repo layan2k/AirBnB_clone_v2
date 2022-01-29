@@ -64,7 +64,7 @@ def tearDown():
 @app.route('/states_list', strict_slashes=False)
 def display_html():
     """Displays html page"""
-    stateobjs = storage.all('State')
+    stateobjs = [s for s in storage.all("State").values()]
     return render_template("7-states_list.html", stateobjs=stateobjs)
 
 
