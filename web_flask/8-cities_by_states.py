@@ -21,8 +21,7 @@ def tearDown(self):
 @app.route('/cities_by_states', strict_slashes=False)
 def display_html():
     """Displays html page"""
-    state = sorted(list(storage.all("State").values()),
-                       key=lambda x: x.name)
+    state = storage.all("State").values()
     return render_template("8-cities_by_states.html", state=state)
 
 
