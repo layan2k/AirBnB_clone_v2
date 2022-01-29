@@ -24,7 +24,6 @@ def hbnb():
 @app.route("/c/<str:text>", strict_slashes=False)
 def ctext(text):
     """Returns HBNB"""
-    text = text
     return "C {}".format(text.replace("_", " "))
 
 
