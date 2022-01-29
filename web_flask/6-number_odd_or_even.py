@@ -4,7 +4,7 @@ Write a script that starts a Flask web application:
 Your web application must be listening on 0.0.0.0, port 5000
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, escape
 
 app = Flask(__name__)
 
@@ -24,8 +24,8 @@ def hbnb():
 @app.route("/c/<text>", strict_slashes=False)
 def ctext(text):
     """Returns ,C <text>"""
-    text = text
-    return "C {}".format(text.replace("_", " "))
+    text = text.replace('_', ' ')
+    return ("C {}".format(escape(text)))
 
 
 @app.route("/python/<text>", strict_slashes=False)
