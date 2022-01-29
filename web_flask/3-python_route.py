@@ -29,8 +29,8 @@ def ctext(text):
 
 @app.route("/python/<text>", strict_slashes=False)
 def ctext(text="is cool"):
-    """Returns Python <text> Default= is_cool"""
-    return "Python {}".format(text.replace("_", " "))
+    """Returns Python <text> Default= is cool"""
+    return "Python {}".format(text.replace('_', ' '))
 
 
 if __name__ == "__main__":
