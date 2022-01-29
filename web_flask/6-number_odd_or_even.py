@@ -23,29 +23,30 @@ def hbnb():
 
 @app.route("/c/<text>", strict_slashes=False)
 def ctext(text):
-    """Returns ,C <text>"""
-    return "C {}".format(text.replace("_", " "))
+    """Returns HBNB"""
+    return "C {}".format(text.replace('_', ' '))
 
 
-@app.route("/python/<text>", strict_slashes=False)
-def ctext(text="is_cool"):
-    """Returns Python <text> Default= is_cool"""
-    return "Python {}".format(text.replace("_", " "))
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def pythontext(text="is cool"):
+    """Returns Python <text> Default= is cool"""
+    return "Python {}".format(text.replace('_', ' '))
 
 
 @app.route("/number/<int:n>")
 def isint(n):
     """return n if interger"""
-    return ("{} is a number".format(n))
+    return ("{:d} is a number".format(n))
 
 
-@app.route("/number/<int:n>")
-def isint(n):
+@app.route("/number_template/<int:n>")
+def isnumber(n):
     """return n if interger, renders template"""
-    return render_template("5-number.html", number=n)
+    return render_template("5-number.html", n=n)
 
 
-@app.route("/number/<int:n>")
+@app.route("/number_odd_or_even/<int:n>")
 def isevenodd(n):
     """return n if interger, renders template"""
     return render_template("6-number_odd_or_even.html", number=n)
