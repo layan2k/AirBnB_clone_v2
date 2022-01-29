@@ -5,6 +5,7 @@ Your web application must be listening on 0.0.0.0, port 5000
 """
 
 from models import storage
+from models import *
 from flask import Flask, render_template
 
 
@@ -20,7 +21,7 @@ def tearDown():
 @app.route('/states_list', strict_slashes=False)
 def display_html():
     """Displays html page"""
-    stateobjs = [s for s in storage.all("State").values()]
+    stateobjs = sorted(list(storage.all("State").values()), key=lambda x: x.name)
     return render_template("7-states_list.html", stateobjs=stateobjs)
 
 
