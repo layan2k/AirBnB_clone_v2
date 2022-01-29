@@ -24,11 +24,11 @@ def hbnb():
 @app.route("/c/<text>", strict_slashes=False)
 def ctext(text):
     """Returns ,C <text>"""
-    return "C {}".format(text.replace("_", " "))
+    return "C {}".format(text.replace('_', ' '))
 
 
 @app.route("/python/<text>", strict_slashes=False)
-def ctext(text="is_cool"):
+def ctext(text="is cool"):
     """Returns Python <text> Default= is_cool"""
     return "Python {}".format(text.replace("_", " "))
 
