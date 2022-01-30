@@ -1,0 +1,11 @@
+header{
+    color:#fff;
+    height: 70px;
+    width: 100%;
+    border-bottom: solid 1px #CCCCCC;
+}
+.logo{
+    vertical-align: center;
+    align-items:left;
+    margin-left: 20px;
+}
